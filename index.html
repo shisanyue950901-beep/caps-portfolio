@@ -1,0 +1,3213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Caps — AIGC 视频创作者作品集：AI 短剧/漫剧承制、带货视频、商业商单与 AI 场景美术。">
+  <title>Caps — AIGC 影像作品集</title>
+  <style>
+    :root {
+      --bg: #08080a;
+      --bg-elevated: #0f0f13;
+      --bg-surface: #14141a;
+      --bg-stage: #050507;
+      --border: rgba(255, 255, 255, 0.085);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --border-accent: rgba(205, 178, 128, 0.38);
+      --ink: #f4f2ec;
+      --ink-secondary: #a4a098;
+      --ink-muted: #6f6b64;
+      --accent: #cdb280;
+      --accent-soft: rgba(205, 178, 128, 0.12);
+      --accent-glow: rgba(205, 178, 128, 0.22);
+      --radius-sm: 4px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --container: 1160px;
+      --gutter: clamp(1.25rem, 4vw, 3rem);
+      --section-space: clamp(4.25rem, 8vw, 7.5rem);
+      --font-sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Monaco, Consolas, monospace;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 75% 44% at 62% -6%, rgba(205, 178, 128, 0.08), transparent 66%),
+        radial-gradient(ellipse 48% 32% at 15% 22%, rgba(255, 255, 255, 0.022), transparent 65%);
+      color: var(--ink);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: rgba(205, 178, 128, 0.28);
+      color: #ffffff;
+    }
+
+    img,
+    video {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) + var(--gutter) * 2);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+
+    /* ── Top Navigation ────────────────────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(8, 8, 10, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      min-height: 4rem;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .brand-mark__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(205, 178, 128, 0.7);
+    }
+
+    .brand-mark__sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      padding-left: 0.6rem;
+      border-left: 1px solid var(--border-strong);
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 2.2vw, 1.9rem);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-links a {
+      font-size: 0.84rem;
+      color: var(--ink-secondary);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      padding-block: 0.35rem;
+      position: relative;
+      transition: color 0.25s var(--ease-out);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a.is-active {
+      color: var(--ink);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.is-active::after {
+      transform: scaleX(1);
+    }
+
+    /* ── Hero Header (Editorial Two-Column + Frame Deck) ───────── */
+    .hero {
+      padding-block: clamp(3rem, 7vw, 6.25rem) clamp(3rem, 6.5vw, 5.5rem);
+      position: relative;
+    }
+
+    .hero__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+      gap: clamp(2.25rem, 5vw, 4.5rem);
+      align-items: center;
+    }
+
+    .hero__copy {
+      min-width: 0;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.35rem;
+    }
+
+    .hero__eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.75;
+    }
+
+    .hero__eyebrow-zh {
+      font-family: var(--font-sans);
+      letter-spacing: 0.16em;
+      color: var(--ink-secondary);
+      padding-left: 0.65rem;
+      border-left: 1px solid var(--border-strong);
+    }
+
+    .hero__title {
+      margin: 0;
+      font-size: clamp(3.6rem, 8.2vw, 6.5rem);
+      font-weight: 500;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+
+    .hero__tagline {
+      margin: 1.35rem 0 0;
+      font-size: clamp(1.04rem, 1.8vw, 1.26rem);
+      font-weight: 400;
+      line-height: 1.65;
+      letter-spacing: 0.02em;
+      color: #e4e0d8;
+      max-width: 36rem;
+    }
+
+    .hero__rule {
+      width: 52px;
+      height: 1px;
+      background: var(--border-accent);
+      margin: clamp(1.4rem, 2.8vw, 2.1rem) 0;
+    }
+
+    .hero__bio {
+      margin: 0;
+      max-width: 35rem;
+      font-size: clamp(0.92rem, 1.15vw, 0.99rem);
+      line-height: 1.9;
+      color: var(--ink-secondary);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1rem;
+      margin-top: clamp(1.75rem, 3.2vw, 2.4rem);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.72rem 1.38rem;
+      border-radius: 999px;
+      font-size: 0.87rem;
+      letter-spacing: 0.04em;
+      transition: background-color 0.25s var(--ease-out),
+                  border-color 0.25s var(--ease-out),
+                  color 0.25s var(--ease-out),
+                  transform 0.25s var(--ease-out);
+    }
+
+    .btn--primary {
+      background: var(--ink);
+      color: #09090b;
+      font-weight: 500;
+    }
+
+    .btn--primary:hover {
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      border: 1px solid var(--border-strong);
+      color: var(--ink-secondary);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--border-accent);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .btn--subtle {
+      padding: 0.48rem 0.98rem;
+      border: 1px solid var(--border-strong);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--ink);
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .btn--subtle:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #ffffff;
+    }
+
+    /* ── Interactive Frame Deck (Hero Visual Hook) ─────────────── */
+    .hero__deck-wrap {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .deck-header__hint {
+      color: var(--accent);
+      opacity: 0.85;
+    }
+
+    .frame-deck {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      perspective: 1100px;
+      user-select: none;
+    }
+
+    .frame-deck__stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.32s var(--ease-out);
+      will-change: transform;
+    }
+
+    .frame-card {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-stage);
+      box-shadow: 0 28px 65px -26px rgba(0, 0, 0, 0.92);
+      transform-origin: center center;
+      transition: transform 0.55s var(--ease-out),
+                  opacity 0.45s var(--ease-out),
+                  border-color 0.35s var(--ease-out),
+                  filter 0.45s var(--ease-out),
+                  box-shadow 0.45s var(--ease-out);
+      cursor: pointer;
+    }
+
+    .frame-card[data-layer="0"] {
+      z-index: 4;
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+      border-color: var(--border-accent);
+      box-shadow: 0 34px 76px -24px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(205, 178, 128, 0.16);
+      filter: brightness(1);
+    }
+
+    .frame-card[data-layer="1"] {
+      z-index: 3;
+      opacity: 0.82;
+      transform: translate3d(18px, 14px, -30px) scale(0.955) rotate(1.3deg);
+      filter: brightness(0.68);
+    }
+
+    .frame-card[data-layer="2"] {
+      z-index: 2;
+      opacity: 0.54;
+      transform: translate3d(34px, 26px, -60px) scale(0.91) rotate(2.5deg);
+      filter: brightness(0.46);
+    }
+
+    .frame-card[data-layer="3"] {
+      z-index: 1;
+      opacity: 0.24;
+      transform: translate3d(-14px, 18px, -80px) scale(0.89) rotate(-1.6deg);
+      filter: brightness(0.35);
+      pointer-events: none;
+    }
+
+    .frame-card[data-layer="1"]:hover {
+      border-color: var(--border-accent);
+      filter: brightness(0.84);
+    }
+
+    .frame-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.65s var(--ease-out);
+    }
+
+    .frame-card[data-layer="0"]:hover .frame-card__img {
+      transform: scale(1.025);
+    }
+
+    .frame-card__sheen {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(
+        circle 280px at var(--mx, 50%) var(--my, 50%),
+        rgba(205, 178, 128, 0.2),
+        transparent 70%
+      );
+      transition: opacity 0.35s ease;
+    }
+
+    .frame-deck.is-tilting .frame-card[data-layer="0"] .frame-card__sheen {
+      opacity: 1;
+    }
+
+    .frame-card__scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(8, 8, 10, 0.16) 0%,
+        rgba(8, 8, 10, 0.04) 44%,
+        rgba(8, 8, 10, 0.88) 100%
+      );
+      pointer-events: none;
+    }
+
+    .frame-card__top {
+      position: absolute;
+      top: 0.95rem;
+      left: 1.05rem;
+      right: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .frame-card__index {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--ink);
+      padding: 0.22rem 0.58rem;
+      border-radius: 999px;
+      background: rgba(8, 8, 10, 0.68);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .frame-card__ratio {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(8, 8, 10, 0.68);
+      border: 1px solid rgba(205, 178, 128, 0.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .frame-card__footer {
+      position: absolute;
+      left: 1.1rem;
+      right: 1.1rem;
+      bottom: 1rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .frame-card__meta {
+      min-width: 0;
+    }
+
+    .frame-card__tag {
+      display: block;
+      font-size: 0.74rem;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .frame-card__title {
+      margin: 0;
+      font-size: clamp(1rem, 1.5vw, 1.18rem);
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .frame-card__jump {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.42rem 0.82rem;
+      border-radius: 999px;
+      background: rgba(8, 8, 10, 0.74);
+      border: 1px solid var(--border-accent);
+      color: var(--ink);
+      font-size: 0.76rem;
+      letter-spacing: 0.03em;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    }
+
+    .frame-card__jump:hover {
+      background: var(--accent);
+      color: #09090b;
+      transform: translateY(-1px);
+    }
+
+    .frame-deck__nav {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+
+    .deck-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.12rem;
+      padding: 0.52rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.015);
+      text-align: left;
+      transition: border-color 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+    }
+
+    .deck-tab:hover {
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .deck-tab.is-active {
+      border-color: var(--border-accent);
+      background: var(--accent-soft);
+    }
+
+    .deck-tab__num {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+    }
+
+    .deck-tab.is-active .deck-tab__num {
+      color: var(--accent);
+    }
+
+    .deck-tab__name {
+      font-size: 0.78rem;
+      color: var(--ink-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .deck-tab.is-active .deck-tab__name {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* ── Sections (Magazine Editorial Grid Skeleton) ───────────── */
+    .section {
+      padding-block: var(--section-space);
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 4.5rem;
+    }
+
+    .section__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem 2.5rem;
+      padding-bottom: 1.5rem;
+      margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section__heading-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .section__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .section__kicker-en {
+      color: var(--ink-muted);
+    }
+
+    .section__title {
+      margin: 0;
+      font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+      font-weight: 500;
+      letter-spacing: 0.015em;
+      line-height: 1.22;
+      color: var(--ink);
+    }
+
+    .section__note {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink-secondary);
+      max-width: 28rem;
+    }
+
+    /* ── Work Showcase Stack & Highlight Pulse ─────────────────── */
+    .works-stack {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(3.25rem, 6vw, 5.25rem);
+    }
+
+    .work-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      scroll-margin-top: 5.5rem;
+      transition: box-shadow 0.4s ease;
+    }
+
+    .work-card.is-anchor-flash .work-stage,
+    .work-card.is-anchor-flash.work-card--portrait-tile {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 24px 64px -26px rgba(205, 178, 128, 0.35);
+    }
+
+    /* Dual Portrait Side-by-Side Showcase (Section 02) */
+    .portrait-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.25rem, 2.5vw, 2rem);
+      align-items: stretch;
+    }
+
+    .work-card--portrait-tile {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.008));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.3s var(--ease-out), box-shadow 0.4s ease;
+    }
+
+    .work-card--portrait-tile:hover {
+      border-color: var(--border-strong);
+    }
+
+    .work-stage-well {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 2vw, 1.5rem);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(205, 178, 128, 0.055), transparent 68%),
+        #050507;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .work-card--portrait-tile .work-stage {
+      height: clamp(330px, 50vh, 470px);
+      width: auto;
+      max-width: 100%;
+      aspect-ratio: var(--media-ratio, 9 / 16);
+      margin-inline: auto;
+    }
+
+    .work-card--portrait-tile .work-meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: clamp(1.2rem, 2.2vw, 1.65rem);
+    }
+
+    .work-card--portrait-tile .work-meta__main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .work-card--portrait-tile .work-meta__desc {
+      flex: none;
+      max-width: none;
+      font-size: 0.9rem;
+    }
+
+    .work-card--portrait-tile .work-meta__bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Video Screening Stage ─────────────────────────────────── */
+    .work-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: var(--media-ratio, 16 / 9);
+      background-color: var(--bg-stage);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 28px 70px -30px rgba(0, 0, 0, 0.88);
+      transition: border-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+    }
+
+    .work-stage:hover {
+      border-color: var(--border-strong);
+    }
+
+    .work-stage.is-playing {
+      border-color: var(--border-accent);
+    }
+
+    .work-stage video {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background-color: transparent;
+    }
+
+    /* Clean fallback visual (zero raw filenames exposed) */
+    .work-stage__backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 1.5rem;
+      text-align: center;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(205, 178, 128, 0.08), transparent 60%),
+        linear-gradient(145deg, #0d0d11 0%, #070709 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .work-stage.is-poster-missing .work-stage__backdrop {
+      opacity: 1;
+    }
+
+    .work-stage.is-playing .work-stage__backdrop {
+      opacity: 0;
+    }
+
+    .work-stage__backdrop-label {
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      color: var(--ink-secondary);
+    }
+
+    /* Minimal centered play trigger (never blocks native bottom controls) */
+    .play-trigger {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 3;
+      transform: translate(-50%, -50%);
+      width: clamp(54px, 6.5vw, 70px);
+      height: clamp(54px, 6.5vw, 70px);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(10, 10, 13, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--ink);
+      transition: transform 0.3s var(--ease-out),
+                  background-color 0.25s var(--ease-out),
+                  border-color 0.25s var(--ease-out),
+                  opacity 0.25s ease;
+    }
+
+    .play-trigger svg {
+      width: 20px;
+      height: 20px;
+      margin-left: 3px;
+      fill: currentColor;
+    }
+
+    .play-trigger:hover {
+      transform: translate(-50%, -50%) scale(1.07);
+      background: rgba(205, 178, 128, 0.24);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .work-stage.is-started .play-trigger {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .work-stage__status {
+      position: absolute;
+      left: 0.9rem;
+      top: 0.9rem;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.34rem 0.72rem;
+      border-radius: 999px;
+      background: rgba(8, 8, 10, 0.84);
+      border: 1px solid var(--border-strong);
+      font-size: 0.74rem;
+      color: var(--ink);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .work-stage__status.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .work-stage__status.is-buffering::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: statusPulse 1.1s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    /* ── Work Caption / Metadata ───────────────────────────────── */
+    .work-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem 2rem;
+      padding-top: 0.15rem;
+    }
+
+    .work-meta__main {
+      flex: 1 1 28rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .work-meta__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem 0.9rem;
+    }
+
+    .work-meta__title {
+      margin: 0;
+      font-size: clamp(1.15rem, 2vw, 1.38rem);
+      font-weight: 500;
+      letter-spacing: 0.015em;
+      color: var(--ink);
+    }
+
+    .work-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-accent);
+      background: var(--accent-soft);
+      font-size: 0.74rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .work-meta__desc {
+      margin: 0;
+      font-size: 0.93rem;
+      line-height: 1.8;
+      color: var(--ink-secondary);
+      max-width: 46rem;
+    }
+
+    .work-meta__side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    .work-meta__spec {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+    }
+
+    .case-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-accent);
+      background: rgba(205, 178, 128, 0.08);
+      color: var(--ink);
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      transition: background-color 0.25s var(--ease-out),
+                  border-color 0.25s var(--ease-out),
+                  color 0.25s var(--ease-out),
+                  transform 0.25s var(--ease-out);
+    }
+
+    .case-trigger:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #09090b;
+      transform: translateY(-1px);
+    }
+
+    /* ── Scene Art Gallery & Continuity Bar ────────────────────── */
+    .scene-link-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem 1.5rem;
+      padding: 0.95rem 1.25rem;
+      margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .scene-link-bar__text {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+      line-height: 1.65;
+    }
+
+    .scene-link-bar__text strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.25rem, 2.8vw, 2rem);
+    }
+
+    .scene-card {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .scene-card__trigger {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-stage);
+      border: 1px solid var(--border);
+      cursor: zoom-in;
+      transition: border-color 0.3s var(--ease-out);
+    }
+
+    .scene-card__trigger:hover {
+      border-color: var(--border-accent);
+    }
+
+    .scene-card__trigger img {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.65s var(--ease-out), opacity 0.3s ease;
+    }
+
+    .scene-card__trigger:hover img {
+      transform: scale(1.03);
+    }
+
+    .scene-card__trigger.is-missing img {
+      opacity: 0;
+    }
+
+    .scene-card__placeholder {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(205, 178, 128, 0.06), transparent 62%),
+        linear-gradient(145deg, #0d0d11, #070709);
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+    }
+
+    .scene-card__zoom {
+      position: absolute;
+      right: 0.8rem;
+      bottom: 0.8rem;
+      z-index: 3;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(8, 8, 10, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.25s ease, transform 0.25s var(--ease-out);
+    }
+
+    .scene-card__trigger:hover .scene-card__zoom,
+    .scene-card__trigger:focus-visible .scene-card__zoom {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scene-card__trigger.is-missing .scene-card__zoom {
+      display: none;
+    }
+
+    .scene-card__caption {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .scene-card__top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .scene-card__title {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .scene-card__index {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .scene-card__desc {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink-secondary);
+    }
+
+    /* ── Production Pipeline / Creative System (Section 04) ────── */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .pipeline-step {
+      background: var(--bg-elevated);
+      padding: clamp(1.5rem, 3.2vw, 2.35rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.35rem;
+      transition: background-color 0.3s var(--ease-out);
+    }
+
+    .pipeline-step:hover {
+      background: var(--bg-surface);
+    }
+
+    .pipeline-step__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .pipeline-step__num {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+    }
+
+    .pipeline-step__pill {
+      font-size: 0.73rem;
+      letter-spacing: 0.04em;
+      color: var(--ink-secondary);
+      padding: 0.18rem 0.62rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pipeline-step__title {
+      margin: 0.75rem 0 0;
+      font-size: clamp(1.12rem, 1.9vw, 1.32rem);
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .pipeline-step__desc {
+      margin: 0.65rem 0 0;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--ink-secondary);
+    }
+
+    .pipeline-step__foot {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .pipeline-proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .pipeline-proof:hover {
+      color: var(--ink);
+      transform: translateX(2px);
+    }
+
+    /* ── Contact Section (Brief + Channels) ────────────────────── */
+    .contact-brief {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-brief__item {
+      background: rgba(15, 15, 19, 0.78);
+      padding: 1.15rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .contact-brief__label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+    }
+
+    .contact-brief__text {
+      margin: 0;
+      font-size: 0.87rem;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+    }
+
+    .contact-panel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .contact-item {
+      background: var(--bg-elevated);
+      padding: clamp(1.6rem, 3.8vw, 2.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.95rem;
+    }
+
+    .contact-item__label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+    }
+
+    .contact-item__value {
+      font-size: clamp(1.05rem, 1.9vw, 1.26rem);
+      font-weight: 400;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .contact-item__row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem 1.25rem;
+    }
+
+    .contact-item__link {
+      font-family: var(--font-mono);
+      font-size: clamp(0.94rem, 1.6vw, 1.1rem);
+      color: var(--ink);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.25s ease, color 0.25s ease;
+    }
+
+    .contact-item__link:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: var(--ink-secondary);
+      transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--border-accent);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .copy-btn.is-copied {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding-block: 2.25rem 3rem;
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+    }
+
+    .site-footer__inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+    }
+
+    /* ── Case Study Fullscreen Modal ───────────────────────────── */
+    .case-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(0.75rem, 2.5vw, 2rem);
+      background: rgba(4, 4, 6, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s var(--ease-out);
+    }
+
+    .case-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .case-modal__shell {
+      width: min(1220px, 100%);
+      height: min(88vh, 780px);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.92);
+      transform: translateY(10px) scale(0.99);
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .case-modal.is-open .case-modal__shell {
+      transform: translateY(0) scale(1);
+    }
+
+    .case-modal__topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 8, 10, 0.78);
+      flex-shrink: 0;
+    }
+
+    .case-modal__counter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .case-modal__counter {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+    }
+
+    .case-modal__topbar-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .case-modal__controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .modal-btn {
+      height: 34px;
+      padding-inline: 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--ink);
+      font-size: 0.8rem;
+      transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .modal-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .case-modal__body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    }
+
+    .case-modal__media {
+      background: var(--bg-stage);
+      border-right: 1px solid var(--border);
+      padding: clamp(1rem, 2.2vw, 1.75rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .case-modal__stage {
+      position: relative;
+      width: 100%;
+      max-height: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .case-modal__stage.is-portrait {
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      aspect-ratio: 9 / 16;
+    }
+
+    .case-modal__stage video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .case-modal__content {
+      padding: clamp(1.35rem, 2.8vw, 2.2rem);
+      overflow-y: auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .case-modal__head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      padding-bottom: 1.15rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .case-modal__meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem 0.85rem;
+    }
+
+    .case-modal__spec {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+    }
+
+    .case-modal__title {
+      margin: 0;
+      font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .case-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .case-block:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .case-block__label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+    }
+
+    .case-block__text {
+      margin: 0;
+      font-size: 0.91rem;
+      line-height: 1.82;
+      color: var(--ink-secondary);
+    }
+
+    .case-steps {
+      margin: 0.25rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .case-steps li {
+      display: grid;
+      grid-template-columns: 1.8rem minmax(0, 1fr);
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      line-height: 1.72;
+      color: var(--ink-secondary);
+    }
+
+    .case-steps__idx {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent);
+      padding-top: 0.18rem;
+    }
+
+    .case-steps__name {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* ── Scene Lightbox Modal ──────────────────────────────────── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 4vw, 2.5rem);
+      background: rgba(4, 4, 6, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s var(--ease-out);
+      touch-action: pan-y;
+    }
+
+    .lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox__dialog {
+      position: relative;
+      width: min(1100px, 100%);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 6rem);
+      width: auto;
+      height: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: #000;
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.9);
+      user-select: none;
+    }
+
+    .lightbox__bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--ink-secondary);
+      font-size: 0.88rem;
+    }
+
+    .lightbox__info {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+      min-width: 0;
+    }
+
+    .lightbox__counter {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .lightbox__controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Subtle Reveal Animation ───────────────────────────────── */
+    .js-enhanced .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+
+    .js-enhanced .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .js-enhanced .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .scene-card__trigger img,
+      .play-trigger,
+      .btn,
+      .frame-card,
+      .frame-deck__stage,
+      .case-modal__shell {
+        transition: none;
+      }
+      .work-stage__status.is-buffering::before {
+        animation: none;
+      }
+    }
+
+    /* ── Responsive Breakpoints ────────────────────────────────── */
+    @media (max-width: 960px) {
+      .hero__grid {
+        grid-template-columns: 1fr;
+        gap: 2.25rem;
+      }
+
+      .hero__deck-wrap {
+        max-width: 560px;
+      }
+
+      .frame-card[data-layer="1"] {
+        transform: translate3d(10px, 10px, -20px) scale(0.965) rotate(0.8deg);
+      }
+
+      .frame-card[data-layer="2"] {
+        transform: translate3d(18px, 18px, -40px) scale(0.93) rotate(1.5deg);
+      }
+
+      .case-modal__shell {
+        height: min(92vh, 880px);
+      }
+
+      .case-modal__body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+        overflow-y: auto;
+      }
+
+      .case-modal__media {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem;
+      }
+
+      .case-modal__stage {
+        max-height: 38vh;
+      }
+
+      .case-modal__stage.is-portrait {
+        height: 38vh;
+        width: auto;
+      }
+
+      .case-modal__content {
+        overflow-y: visible;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .portrait-grid,
+      .pipeline-grid,
+      .contact-brief,
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .work-card--portrait-tile .work-stage {
+        height: auto;
+        width: min(100%, 310px);
+      }
+
+      .work-meta__side {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .site-nav__inner {
+        min-height: 3.5rem;
+        gap: 0.9rem;
+      }
+
+      .brand-mark__sub {
+        display: none;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        font-size: 0.8rem;
+      }
+
+      .frame-deck {
+        aspect-ratio: 16 / 10;
+      }
+
+      .frame-deck__nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .scene-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-meta {
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+
+      .lightbox__bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .case-modal__topbar-label {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航">
+    <div class="container site-nav__inner">
+      <a class="brand-mark" href="#top" aria-label="Caps 首页">
+        <span class="brand-mark__dot" aria-hidden="true"></span>
+        <span>Caps</span>
+        <span class="brand-mark__sub">AIGC REEL</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#drama">短剧与漫剧</a></li>
+        <li><a href="#commercial">带货与复刻</a></li>
+        <li><a href="#scenes">场景美术</a></li>
+        <li><a href="#system">创作系统</a></li>
+        <li><a href="#contact">联系方式</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="container">
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <div class="hero__eyebrow">
+            <span>AIGC PORTFOLIO</span>
+            <span class="hero__eyebrow-zh">影像作品集</span>
+          </div>
+          <h1 class="hero__title">Caps</h1>
+          <p class="hero__tagline">AIGC 视频创作者 —— AI 短剧/漫剧承制 · 带货视频 · 商业商单</p>
+          <div class="hero__rule" aria-hidden="true"></div>
+          <p class="hero__bio">
+            长期从事 AI 视频创作，主攻短剧漫剧与带货视频，围绕拉片分镜、定妆定版、批量生成尾帧续接到音画剪辑验收建立起全流程自动化生产管线。专注于稳定可控、可直接落地的影像制作与商业表达。
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#drama">
+              <span>观看作品</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+            <a class="btn btn--ghost" href="#system">创作系统</a>
+            <a class="btn btn--ghost" href="#contact">联系合作</a>
+          </div>
+        </div>
+
+        <!-- P0-1 Interactive Multi-Style Frame Deck -->
+        <div class="hero__deck-wrap" aria-label="多风格作品画幅叠卡">
+          <div class="deck-header">
+            <span>SELECTED STILLS · 01—04</span>
+            <span class="deck-header__hint">点击切帧 / 直达作品</span>
+          </div>
+
+          <div class="frame-deck" id="hero-deck">
+            <div class="frame-deck__stage" id="hero-deck-stage">
+              <article class="frame-card" data-deck-card="0" data-layer="0" data-target="#work-tiangong">
+                <img class="frame-card__img" src="assets/tiangong_poster.jpg" alt="天宫 — 东方神话短片封面" style="object-position: center center;">
+                <div class="frame-card__sheen" aria-hidden="true"></div>
+                <div class="frame-card__scrim" aria-hidden="true"></div>
+                <div class="frame-card__top">
+                  <span class="frame-card__index">01 / 04</span>
+                  <span class="frame-card__ratio">16:9</span>
+                </div>
+                <div class="frame-card__footer">
+                  <div class="frame-card__meta">
+                    <span class="frame-card__tag">东方神话 · 33 秒七镜</span>
+                    <h2 class="frame-card__title">天宫</h2>
+                  </div>
+                  <a class="frame-card__jump" href="#work-tiangong" data-deck-jump>前往观看 ↓</a>
+                </div>
+              </article>
+
+              <article class="frame-card" data-deck-card="1" data-layer="1" data-target="#work-manju">
+                <img class="frame-card__img" src="assets/manju_clip_poster.jpg" alt="同人短剧片段封面" style="object-position: 62% center;">
+                <div class="frame-card__sheen" aria-hidden="true"></div>
+                <div class="frame-card__scrim" aria-hidden="true"></div>
+                <div class="frame-card__top">
+                  <span class="frame-card__index">02 / 04</span>
+                  <span class="frame-card__ratio">16:9</span>
+                </div>
+                <div class="frame-card__footer">
+                  <div class="frame-card__meta">
+                    <span class="frame-card__tag">同人短剧 · 个人创作（非商业）</span>
+                    <h2 class="frame-card__title">同人短剧片段</h2>
+                  </div>
+                  <a class="frame-card__jump" href="#work-manju" data-deck-jump>前往观看 ↓</a>
+                </div>
+              </article>
+
+              <article class="frame-card" data-deck-card="2" data-layer="2" data-target="#work-qianshan">
+                <img class="frame-card__img" src="assets/qianshan_v3_poster.jpg" alt="《千山暮雪》氛围短片复刻封面" style="object-position: center 42%;">
+                <div class="frame-card__sheen" aria-hidden="true"></div>
+                <div class="frame-card__scrim" aria-hidden="true"></div>
+                <div class="frame-card__top">
+                  <span class="frame-card__index">03 / 04</span>
+                  <span class="frame-card__ratio">9:16</span>
+                </div>
+                <div class="frame-card__footer">
+                  <div class="frame-card__meta">
+                    <span class="frame-card__tag">氛围短片复刻 · 帧锚点</span>
+                    <h2 class="frame-card__title">《千山暮雪》</h2>
+                  </div>
+                  <a class="frame-card__jump" href="#work-qianshan" data-deck-jump>前往观看 ↓</a>
+                </div>
+              </article>
+
+              <article class="frame-card" data-deck-card="3" data-layer="3" data-target="#work-edu">
+                <img class="frame-card__img" src="assets/edu_sample_poster.jpg" alt="教育品牌竖屏带货样片封面" style="object-position: center 16%;">
+                <div class="frame-card__sheen" aria-hidden="true"></div>
+                <div class="frame-card__scrim" aria-hidden="true"></div>
+                <div class="frame-card__top">
+                  <span class="frame-card__index">04 / 04</span>
+                  <span class="frame-card__ratio">9:16</span>
+                </div>
+                <div class="frame-card__footer">
+                  <div class="frame-card__meta">
+                    <span class="frame-card__tag">教育品牌 · 带货样片</span>
+                    <h2 class="frame-card__title">教育品牌竖屏带货样片</h2>
+                  </div>
+                  <a class="frame-card__jump" href="#work-edu" data-deck-jump>前往观看 ↓</a>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="frame-deck__nav" role="tablist" aria-label="切换首屏预览作品">
+            <button class="deck-tab is-active" type="button" role="tab" aria-selected="true" data-deck-tab="0">
+              <span class="deck-tab__num">01</span>
+              <span class="deck-tab__name">天宫</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" aria-selected="false" data-deck-tab="1">
+              <span class="deck-tab__num">02</span>
+              <span class="deck-tab__name">同人短剧</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" aria-selected="false" data-deck-tab="2">
+              <span class="deck-tab__num">03</span>
+              <span class="deck-tab__name">千山暮雪</span>
+            </button>
+            <button class="deck-tab" type="button" role="tab" aria-selected="false" data-deck-tab="3">
+              <span class="deck-tab__num">04</span>
+              <span class="deck-tab__name">带货样片</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 01. AI 短剧 / 漫剧 -->
+    <section class="section" id="drama" aria-labelledby="heading-drama">
+      <div class="container">
+        <div class="section__head reveal">
+          <div class="section__heading-group">
+            <span class="section__kicker" aria-hidden="true">
+              <span>01</span>
+              <span class="section__kicker-en">/ NARRATIVE &amp; MANJU</span>
+            </span>
+            <h2 class="section__title" id="heading-drama">AI 短剧 / 漫剧</h2>
+          </div>
+          <p class="section__note">叙事镜头连贯性、角色定妆控制与东方神话世界观视觉建构。</p>
+        </div>
+
+        <div class="works-stack">
+          <!-- 同人短剧片段 -->
+          <article class="work-card reveal" id="work-manju" data-work-card data-work-id="manju">
+            <div class="work-stage" data-video-stage style="--media-ratio: 1280 / 720;">
+              <div class="work-stage__backdrop" aria-hidden="true">
+                <span class="work-stage__backdrop-label">封面加载中</span>
+              </div>
+              <video
+                controls
+                preload="none"
+                playsinline
+                poster="assets/manju_clip_poster.jpg"
+                aria-label="同人短剧片段视频">
+                <source src="assets/manju_clip_web.mp4" type="video/mp4">
+                您的浏览器暂不支持内嵌视频播放。
+              </video>
+              <button class="play-trigger" type="button" aria-label="播放同人短剧片段">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>
+              </button>
+              <div class="work-stage__status" role="status" aria-live="polite"></div>
+            </div>
+            <div class="work-meta">
+              <div class="work-meta__main">
+                <div class="work-meta__head">
+                  <h3 class="work-meta__title">同人短剧片段</h3>
+                  <span class="work-tag">同人短剧 · 个人创作（非商业）</span>
+                </div>
+                <p class="work-meta__desc">
+                  2D 赛璐璐风格连续片段，围绕原创角色定妆锁定脸与造型，经单镜生成、镜头拼接与逐镜质检，呈现夜雨教室情绪张力与多角色镜头连贯。
+                </p>
+              </div>
+              <div class="work-meta__side">
+                <p class="work-meta__spec">16:9 · 多角色一致 / 逐镜质检</p>
+                <button class="case-trigger" type="button" data-open-case="manju">
+                  <span>查看制作拆解</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 天宫 -->
+          <article class="work-card reveal" id="work-tiangong" data-work-card data-work-id="tiangong">
+            <div class="work-stage" data-video-stage style="--media-ratio: 1280 / 720;">
+              <div class="work-stage__backdrop" aria-hidden="true">
+                <span class="work-stage__backdrop-label">封面加载中</span>
+              </div>
+              <video
+                controls
+                preload="none"
+                playsinline
+                poster="assets/tiangong_poster.jpg"
+                aria-label="东方神话天宫短片视频">
+                <source src="assets/tiangong_web.mp4" type="video/mp4">
+                您的浏览器暂不支持内嵌视频播放。
+              </video>
+              <button class="play-trigger" type="button" aria-label="播放天宫短片">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>
+              </button>
+              <div class="work-stage__status" role="status" aria-live="polite"></div>
+            </div>
+            <div class="work-meta">
+              <div class="work-meta__main">
+                <div class="work-meta__head">
+                  <h3 class="work-meta__title">天宫</h3>
+                  <span class="work-tag">东方神话 · 天宫</span>
+                </div>
+                <p class="work-meta__desc">
+                  33 秒七个镜头的东方神话短片。场景定版图先行锁定，通过逐镜生成与尾帧续接保持空间与光感连贯；人物只作尺度参照（不超过画面高度 5%），全片采用一首连续东方神话配乐、切镜不换曲。
+                </p>
+              </div>
+              <div class="work-meta__side">
+                <p class="work-meta__spec">16:9 · 33 秒七镜 / 尾帧续接</p>
+                <button class="case-trigger" type="button" data-open-case="tiangong">
+                  <span>查看制作拆解</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. 商业带货与风格复刻 (P1-4 Merged Dual-Portrait Showcase) -->
+    <section class="section" id="commercial" aria-labelledby="heading-commercial">
+      <div class="container">
+        <div class="section__head reveal">
+          <div class="section__heading-group">
+            <span class="section__kicker" aria-hidden="true">
+              <span>02</span>
+              <span class="section__kicker-en">/ COMMERCIAL &amp; RECREATION</span>
+            </span>
+            <h2 class="section__title" id="heading-commercial">商业带货与风格复刻</h2>
+          </div>
+          <p class="section__note">面向移动端竖屏场景的商业带货样片全流程交付，以及氛围短片逐镜拉片复刻。</p>
+        </div>
+
+        <div class="portrait-grid">
+          <!-- 教育品牌带货样片 -->
+          <article class="work-card work-card--portrait-tile reveal" id="work-edu" data-work-card data-work-id="edu" data-fixed-portrait="true">
+            <div class="work-stage-well">
+              <div class="work-stage" data-video-stage style="--media-ratio: 720 / 1280;">
+                <div class="work-stage__backdrop" aria-hidden="true">
+                  <span class="work-stage__backdrop-label">竖屏封面加载中</span>
+                </div>
+                <video
+                  controls
+                  preload="none"
+                  playsinline
+                  poster="assets/edu_sample_poster.jpg"
+                  aria-label="教育品牌竖屏带货样片视频">
+                  <source src="assets/edu_sample_web.mp4" type="video/mp4">
+                  您的浏览器暂不支持内嵌视频播放。
+                </video>
+                <button class="play-trigger" type="button" aria-label="播放教育品牌带货样片">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>
+                </button>
+                <div class="work-stage__status" role="status" aria-live="polite"></div>
+              </div>
+            </div>
+            <div class="work-meta">
+              <div class="work-meta__main">
+                <div class="work-meta__head">
+                  <h3 class="work-meta__title">教育品牌竖屏带货样片</h3>
+                  <span class="work-tag">教育品牌 · 带货样片</span>
+                </div>
+                <p class="work-meta__desc">
+                  真人主持口播结合产品内页真实素材动态化（甲方原图横移推镜，保证文字 100% 真实），配合 AI 配音、字幕与音轨逐字对齐及全片响度统一，完成脚本、生成、配音、剪辑全流程交付。
+                </p>
+              </div>
+              <div class="work-meta__bar">
+                <p class="work-meta__spec">竖屏 9:16 · 商业带货样片</p>
+                <button class="case-trigger" type="button" data-open-case="edu">
+                  <span>查看制作拆解</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 《千山暮雪》 -->
+          <article class="work-card work-card--portrait-tile reveal" id="work-qianshan" data-work-card data-work-id="qianshan" data-fixed-portrait="true">
+            <div class="work-stage-well">
+              <div class="work-stage" data-video-stage style="--media-ratio: 704 / 1248;">
+                <div class="work-stage__backdrop" aria-hidden="true">
+                  <span class="work-stage__backdrop-label">竖屏封面加载中</span>
+                </div>
+                <video
+                  controls
+                  preload="none"
+                  playsinline
+                  poster="assets/qianshan_v3_poster.jpg"
+                  aria-label="千山暮雪氛围短片复刻视频">
+                  <source src="assets/qianshan_v3_web.mp4" type="video/mp4">
+                  您的浏览器暂不支持内嵌视频播放。
+                </video>
+                <button class="play-trigger" type="button" aria-label="播放千山暮雪短片复刻">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20"></polygon></svg>
+                </button>
+                <div class="work-stage__status" role="status" aria-live="polite"></div>
+              </div>
+            </div>
+            <div class="work-meta">
+              <div class="work-meta__main">
+                <div class="work-meta__head">
+                  <h3 class="work-meta__title">《千山暮雪》</h3>
+                  <span class="work-tag">氛围短片复刻</span>
+                </div>
+                <p class="work-meta__desc">
+                  按原片逐镜拉片取证与帧锚点复刻完成，还原油画笔触与木屋冬夜冷暖氛围质感，并在室内镜通过提示词约束与逐帧验收压住异常飘雪点。
+                </p>
+              </div>
+              <div class="work-meta__bar">
+                <p class="work-meta__spec">竖屏 9:16 · 拉片拆解与复刻</p>
+                <button class="case-trigger" type="button" data-open-case="qianshan">
+                  <span>查看制作拆解</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. AI 场景美术 -->
+    <section class="section" id="scenes" aria-labelledby="heading-scenes">
+      <div class="container">
+        <div class="section__head reveal">
+          <div class="section__heading-group">
+            <span class="section__kicker" aria-hidden="true">
+              <span>03</span>
+              <span class="section__kicker-en">/ CONCEPT ART</span>
+            </span>
+            <h2 class="section__title" id="heading-scenes">AI 场景美术</h2>
+          </div>
+          <p class="section__note">东方神话前期场景定版图与光影探索，点击任意画面可查看大图并支持键盘或滑动切图。</p>
+        </div>
+
+        <div class="scene-link-bar reveal">
+          <p class="scene-link-bar__text">
+            <strong>前期定版 → 动态成片</strong>：本组 4 张东方神话场景概念图与《天宫》短片一脉相承，在进入视频生成前先行锁定建筑尺度、材质与光感基调。
+          </p>
+          <a class="btn btn--subtle" href="#work-tiangong" data-anchor-jump>观看《天宫》成片 ↑</a>
+        </div>
+
+        <div class="scene-grid">
+          <figure class="scene-card reveal">
+            <button class="scene-card__trigger" type="button" data-lightbox-index="0" aria-label="放大查看云海月洞门大殿">
+              <div class="scene-card__placeholder" aria-hidden="true">
+                <span>场景画面加载中</span>
+              </div>
+              <img src="assets/scene_1.jpg" alt="AI 场景美术 01 — 云海月洞门大殿" loading="lazy" decoding="async">
+              <span class="scene-card__zoom" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+              </span>
+            </button>
+            <figcaption class="scene-card__caption">
+              <div class="scene-card__top">
+                <span class="scene-card__title">云海月洞门大殿</span>
+                <span class="scene-card__index">01 / 04</span>
+              </div>
+              <p class="scene-card__desc">对称构图以圆形月洞门框取悬松与云海，前景金龙盘柱、铜鼎与镜面地砖反射强化空间纵深。</p>
+            </figcaption>
+          </figure>
+
+          <figure class="scene-card reveal">
+            <button class="scene-card__trigger" type="button" data-lightbox-index="1" aria-label="放大查看盘松垂檐仙殿内景">
+              <div class="scene-card__placeholder" aria-hidden="true">
+                <span>场景画面加载中</span>
+              </div>
+              <img src="assets/scene_2.jpg" alt="AI 场景美术 02 — 盘松垂檐仙殿内景" loading="lazy" decoding="async">
+              <span class="scene-card__zoom" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+              </span>
+            </button>
+            <figcaption class="scene-card__caption">
+              <div class="scene-card__top">
+                <span class="scene-card__title">盘松垂檐仙殿内景</span>
+                <span class="scene-card__index">02 / 04</span>
+              </div>
+              <p class="scene-card__desc">斜向透视交代雕花梁枋、垂枝古松与案几屏风层次，利用中景圆窗将室内暖光过渡至室外云海。</p>
+            </figcaption>
+          </figure>
+
+          <figure class="scene-card reveal">
+            <button class="scene-card__trigger" type="button" data-lightbox-index="2" aria-label="放大查看临水望月云台">
+              <div class="scene-card__placeholder" aria-hidden="true">
+                <span>场景画面加载中</span>
+              </div>
+              <img src="assets/scene_3.jpg" alt="AI 场景美术 03 — 临水望月云台" loading="lazy" decoding="async">
+              <span class="scene-card__zoom" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+              </span>
+            </button>
+            <figcaption class="scene-card__caption">
+              <div class="scene-card__top">
+                <span class="scene-card__title">临水望月云台</span>
+                <span class="scene-card__index">03 / 04</span>
+              </div>
+              <p class="scene-card__desc">双龙石柱与飞檐作画框，串联近景水台倒影、中景云雾与远景悬瀑新月，构建开阔全景尺度。</p>
+            </figcaption>
+          </figure>
+
+          <figure class="scene-card reveal">
+            <button class="scene-card__trigger" type="button" data-lightbox-index="3" aria-label="放大查看繁花回廊逆光远眺">
+              <div class="scene-card__placeholder" aria-hidden="true">
+                <span>场景画面加载中</span>
+              </div>
+              <img src="assets/scene_4.jpg" alt="AI 场景美术 04 — 繁花回廊逆光远眺" loading="lazy" decoding="async">
+              <span class="scene-card__zoom" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+              </span>
+            </button>
+            <figcaption class="scene-card__caption">
+              <div class="scene-card__top">
+                <span class="scene-card__title">繁花回廊逆光远眺</span>
+                <span class="scene-card__index">04 / 04</span>
+              </div>
+              <p class="scene-card__desc">压暗廊柱与雕花彩绘以突出前景繁花与逆光圆窗，用强冷暖明暗对比定调黄昏云海氛围。</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. 创作系统 (P0-2 Automation Pipeline & In-Page Proof Anchors) -->
+    <section class="section" id="system" aria-labelledby="heading-system">
+      <div class="container">
+        <div class="section__head reveal">
+          <div class="section__heading-group">
+            <span class="section__kicker" aria-hidden="true">
+              <span>04</span>
+              <span class="section__kicker-en">/ PRODUCTION PIPELINE</span>
+            </span>
+            <h2 class="section__title" id="heading-system">创作系统</h2>
+          </div>
+          <p class="section__note">以工程化四步流程确保角色一致性、镜头连贯与商业成片稳定交付，每步均可在页内成片中对应核验。</p>
+        </div>
+
+        <div class="pipeline-grid reveal">
+          <article class="pipeline-step">
+            <div>
+              <div class="pipeline-step__head">
+                <span class="pipeline-step__num">STEP 01</span>
+                <span class="pipeline-step__pill">逐镜取证 · 模板骨架</span>
+              </div>
+              <h3 class="pipeline-step__title">拉片拆解与分镜</h3>
+              <p class="pipeline-step__desc">
+                逐镜取证、提示词按模板骨架填写。开工前先明确每镜景别、光影方向、动作节点与信息重点，让镜头语言与商业表达在进入生成前即具备可复核的结构。
+              </p>
+            </div>
+            <div class="pipeline-step__foot">
+              <a class="pipeline-proof" href="#work-qianshan" data-anchor-jump>
+                <span>页内实证：《千山暮雪》逐镜拉片复刻</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="pipeline-step">
+            <div>
+              <div class="pipeline-step__head">
+                <span class="pipeline-step__num">STEP 02</span>
+                <span class="pipeline-step__pill">先锁定 · 再生产</span>
+              </div>
+              <h3 class="pipeline-step__title">定妆与定版</h3>
+              <p class="pipeline-step__desc">
+                角色脸、场景图先锁定再生产。短剧项目先完成原创角色定妆锁定人脸与造型，大场景短片先敲定场景定版图，避免动态阶段反复跑偏返工。
+              </p>
+            </div>
+            <div class="pipeline-step__foot">
+              <a class="pipeline-proof" href="#scenes" data-anchor-jump>
+                <span>页内实证：东方神话场景定版图</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="pipeline-step">
+            <div>
+              <div class="pipeline-step__head">
+                <span class="pipeline-step__num">STEP 03</span>
+                <span class="pipeline-step__pill">单变量迭代 · 胜出锁定</span>
+              </div>
+              <h3 class="pipeline-step__title">批量生成与尾帧续接</h3>
+              <p class="pipeline-step__desc">
+                单变量迭代、胜出版本锁定。逐镜推进生成并结合尾帧续接保持空间与光感连贯；对容易失真的文字细节或画面噪点，按实拍素材动态化或提示词约束做定向收敛。
+              </p>
+            </div>
+            <div class="pipeline-step__foot">
+              <a class="pipeline-proof" href="#work-tiangong" data-anchor-jump>
+                <span>页内实证：《天宫》七镜尾帧续接</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="pipeline-step">
+            <div>
+              <div class="pipeline-step__head">
+                <span class="pipeline-step__num">STEP 04</span>
+                <span class="pipeline-step__pill">抽帧核对 · 参数实测</span>
+              </div>
+              <h3 class="pipeline-step__title">音画剪辑与逐帧验收</h3>
+              <p class="pipeline-step__desc">
+                抽帧核对、参数实测后才交付。统筹配音、连续配乐、字幕与音轨逐字对齐以及全片响度统一，结合逐镜质检与抽帧核查压住细节瑕疵后再输出成片。
+              </p>
+            </div>
+            <div class="pipeline-step__foot">
+              <a class="pipeline-proof" href="#work-edu" data-anchor-jump>
+                <span>页内实证：教育品牌带货样片全流程交付</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. 联系方式 -->
+    <section class="section" id="contact" aria-labelledby="heading-contact">
+      <div class="container">
+        <div class="section__head reveal">
+          <div class="section__heading-group">
+            <span class="section__kicker" aria-hidden="true">
+              <span>05</span>
+              <span class="section__kicker-en">/ INQUIRY</span>
+            </span>
+            <h2 class="section__title" id="heading-contact">联系方式</h2>
+          </div>
+          <p class="section__note">AI 短剧/漫剧承制、带货视频与商业合作咨询。</p>
+        </div>
+
+        <div class="contact-brief reveal" aria-label="合作说明">
+          <div class="contact-brief__item">
+            <span class="contact-brief__label">可承接类型</span>
+            <p class="contact-brief__text">AI 短剧 / 漫剧承制、品牌带货与商业视频样片、前期场景美术定版。</p>
+          </div>
+          <div class="contact-brief__item">
+            <span class="contact-brief__label">制作方式</span>
+            <p class="contact-brief__text">支持从拉片分镜、定妆定版到音画剪辑与逐帧验收的全流程交付。</p>
+          </div>
+          <div class="contact-brief__item">
+            <span class="contact-brief__label">沟通起步</span>
+            <p class="contact-brief__text">联系时附上参考片、题材方向或预期周期，即可快速沟通方案与排期。</p>
+          </div>
+        </div>
+
+        <div class="contact-panel reveal">
+          <div class="contact-item">
+            <span class="contact-item__label">WECHAT / 微信</span>
+            <div class="contact-item__value">微信联系、备注「作品集」</div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-item__label">EMAIL / 邮箱</span>
+            <div class="contact-item__row">
+              <a class="contact-item__link" href="mailto:shisanyue950901@gmail.com">shisanyue950901@gmail.com</a>
+              <button class="copy-btn" type="button" data-copy-email="shisanyue950901@gmail.com">复制邮箱</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <span>Caps · AIGC 影像作品集</span>
+      <span>界面设计：Neon</span>
+    </div>
+  </footer>
+
+  <!-- P0-3 Case Study Breakdown Modal -->
+  <div class="case-modal" id="case-modal" role="dialog" aria-modal="true" aria-labelledby="case-modal-title" aria-hidden="true">
+    <div class="case-modal__shell">
+      <div class="case-modal__topbar">
+        <div class="case-modal__counter-group">
+          <span class="case-modal__counter" id="case-modal-counter">01 / 04</span>
+          <span class="case-modal__topbar-label">CASE BREAKDOWN · 制作拆解</span>
+        </div>
+        <div class="case-modal__controls">
+          <button class="modal-btn" type="button" id="case-prev" aria-label="上一部作品">上一部</button>
+          <button class="modal-btn" type="button" id="case-next" aria-label="下一部作品">下一部</button>
+          <button class="modal-btn" type="button" id="case-close" aria-label="关闭制作拆解">关闭</button>
+        </div>
+      </div>
+
+      <div class="case-modal__body">
+        <div class="case-modal__media">
+          <div class="case-modal__stage" id="case-modal-stage">
+            <video id="case-modal-video" controls preload="metadata" playsinline></video>
+            <div class="work-stage__status" id="case-modal-status" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="case-modal__content" id="case-modal-content">
+          <div class="case-modal__head">
+            <div class="case-modal__meta-row">
+              <span class="work-tag" id="case-modal-tag"></span>
+              <span class="case-modal__spec" id="case-modal-spec"></span>
+            </div>
+            <h3 class="case-modal__title" id="case-modal-title"></h3>
+          </div>
+
+          <div class="case-block">
+            <span class="case-block__label">01 / 负责范围</span>
+            <p class="case-block__text" id="case-modal-scope"></p>
+          </div>
+
+          <div class="case-block">
+            <span class="case-block__label">02 / 核心难点</span>
+            <p class="case-block__text" id="case-modal-challenge"></p>
+          </div>
+
+          <div class="case-block">
+            <span class="case-block__label">03 / 四步流程</span>
+            <ol class="case-steps" id="case-modal-steps"></ol>
+          </div>
+
+          <div class="case-block">
+            <span class="case-block__label">04 / 难点处理</span>
+            <p class="case-block__text" id="case-modal-solution"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene Gallery Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="场景美术大图预览" aria-hidden="true">
+    <div class="lightbox__dialog" id="lightbox-dialog">
+      <img class="lightbox__img" id="lightbox-img" src="" alt="">
+      <div class="lightbox__bar">
+        <div class="lightbox__info">
+          <span class="lightbox__counter" id="lightbox-counter">01 / 04</span>
+          <span id="lightbox-caption"></span>
+        </div>
+        <div class="lightbox__controls">
+          <button class="modal-btn" type="button" id="lightbox-prev" aria-label="上一张">上一张</button>
+          <button class="modal-btn" type="button" id="lightbox-next" aria-label="下一张">下一张</button>
+          <button class="modal-btn" type="button" id="lightbox-close" aria-label="关闭预览">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      document.documentElement.classList.add("js-enhanced");
+
+      var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var supportsFineHover = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+      /* ── 1. Case Study Data (Strictly Factual) ─────────────────── */
+      var CASE_LIST = [
+        {
+          id: "manju",
+          cardId: "work-manju",
+          title: "同人短剧片段",
+          tag: "同人短剧 · 个人创作（非商业）",
+          spec: "横屏 16:9 · 2D 赛璐璐风格",
+          isPortrait: false,
+          ratio: "1280 / 720",
+          src: "assets/manju_clip_web.mp4",
+          poster: "assets/manju_clip_poster.jpg",
+          scope: "原创角色定妆设定、单镜生成、镜头拼接与逐镜质检。",
+          challenge: "多角色在连续切镜中的脸部与造型一致性控制，以及单镜生成后拼接的镜头连贯。",
+          steps: [
+            { name: "拉片拆解与分镜", detail: "按模板骨架拆解夜雨教室等情绪场次的构图、光位与动作节奏。" },
+            { name: "定妆与定版", detail: "原创角色先行定妆，锁定脸部特征与造型基准后再进入生成。" },
+            { name: "批量生成与尾帧续接", detail: "逐镜单变量迭代筛选胜出版本，保持角色神态与镜头衔接连贯。" },
+            { name: "音画剪辑与逐帧验收", detail: "单镜生成后完成拼接剪辑，通过逐镜质检核对多角色一致性。" }
+          ],
+          solution: "生产前以原创角色定妆先锁定脸与造型基准，再采用单镜生成后拼接的方式控制每镜质量，最后逐镜质检淘汰跳戏与跑脸镜头，守住多角色一致性与镜头连贯。"
+        },
+        {
+          id: "tiangong",
+          cardId: "work-tiangong",
+          title: "天宫",
+          tag: "东方神话 · 天宫",
+          spec: "横屏 16:9 · 33 秒七个镜头",
+          isPortrait: false,
+          ratio: "1280 / 720",
+          src: "assets/tiangong_web.mp4",
+          poster: "assets/tiangong_poster.jpg",
+          scope: "场景定版图锁定、33 秒七个镜头逐镜生成与尾帧续接、连续东方神话配乐统筹与成片剪辑。",
+          challenge: "东方神话殿堂的宏大尺度感塑造，以及七个镜头切换之间的空间连贯与光感统一。",
+          steps: [
+            { name: "拉片拆解与分镜", detail: "规划 33 秒七个镜头的空间递进动线，按模板骨架填写分镜提示词。" },
+            { name: "定妆与定版", detail: "场景定版图先行锁定，确定雕龙玉柱、藻井与云海的光影和材质基准。" },
+            { name: "批量生成与尾帧续接", detail: "基于定版图逐镜生成，单变量迭代锁定胜出版本，以尾帧续接保持连贯。" },
+            { name: "音画剪辑与逐帧验收", detail: "全片铺设一首连续东方神话配乐、切镜不换曲，逐帧验收光感统一后交付。" }
+          ],
+          solution: "先由场景定版图锁定视觉与光感基调，再用尾帧续接串联七个镜头保持运动和空间连贯；人物严格只作尺度参照（不超过画面高度 5%）以放大建筑体量，同时全片使用一首连续东方神话配乐、切镜不换曲，强化整体沉浸感。"
+        },
+        {
+          id: "edu",
+          cardId: "work-edu",
+          title: "教育品牌竖屏带货样片",
+          tag: "教育品牌 · 带货样片",
+          spec: "竖屏 9:16 · 脚本/生成/配音/剪辑全流程",
+          isPortrait: true,
+          ratio: "720 / 1280",
+          src: "assets/edu_sample_web.mp4",
+          poster: "assets/edu_sample_poster.jpg",
+          scope: "脚本、生成、配音、剪辑全流程。",
+          challenge: "生成画面里的文字不可信，尤其是产品内页小字容易出现幻觉与失真，无法直接用于商业带货展示。",
+          steps: [
+            { name: "拉片拆解与分镜", detail: "围绕竖屏带货节奏完成脚本与分镜拆解，按模板骨架规划口播与内页展示段落。" },
+            { name: "定妆与定版", detail: "锁定真人主持口播视觉基调，并整理产品内页甲方原图素材。" },
+            { name: "批量生成与尾帧续接", detail: "口播镜头单变量迭代锁定胜出版本；产品内页改用甲方原图横移推镜实现真素材动态化。" },
+            { name: "音画剪辑与逐帧验收", detail: "完成 AI 配音、字幕与音轨逐字对齐及全片响度统一，抽帧核对与参数实测后交付。" }
+          ],
+          solution: "避免在生成画面中硬出小字，将产品内页环节改为真实素材动态化——直接基于甲方原图做横移推镜，保证文字 100% 真实；后期配套 AI 配音、字幕与音轨逐字对齐及全片响度统一，兼顾信息准确度与成片听感。"
+        },
+        {
+          id: "qianshan",
+          cardId: "work-qianshan",
+          title: "《千山暮雪》",
+          tag: "氛围短片复刻",
+          spec: "竖屏 9:16 · 逐镜拉片与帧锚点复刻",
+          isPortrait: true,
+          ratio: "704 / 1248",
+          src: "assets/qianshan_v3_web.mp4",
+          poster: "assets/qianshan_v3_poster.jpg",
+          scope: "拉片拆解、复刻生成、剪辑。",
+          challenge: "冬日油画氛围质感的精准复现，以及生成模型容易在室内镜头里乱飘雪点的控制。",
+          steps: [
+            { name: "拉片拆解与分镜", detail: "按原片逐镜拉片取证，拆解镜头构图、冷暖光影与剪辑节拍，建立帧锚点。" },
+            { name: "定妆与定版", detail: "锁定人物造型与油画质感冬夜木屋基调，锚定关键画面参考。" },
+            { name: "批量生成与尾帧续接", detail: "依托帧锚点逐镜复刻生成，单变量收敛质感并严格约束室内画面干净度。" },
+            { name: "音画剪辑与逐帧验收", detail: "按原片情绪节奏剪辑拼接，对室内镜头做逐帧验收压住异常雪点。" }
+          ],
+          solution: "先通过原片逐镜拉片取证与帧锚点复刻还原油画笔触与冬日冷暖氛围；针对生成模型爱在室内乱飘雪点的常见问题，在室内镜靠提示词定向约束与逐帧验收反复压住异常雪点，确保画面空间逻辑可信。"
+        }
+      ];
+
+      var CASE_BY_ID = {};
+      CASE_LIST.forEach(function (item, idx) {
+        item.index = idx;
+        CASE_BY_ID[item.id] = item;
+      });
+
+      /* ── 2. Shared Video Status / Buffering / Playback Control ─── */
+      var allVideos = [];
+
+      function setStageStatus(statusEl, message, isBuffering) {
+        if (!statusEl) return;
+        if (!message) {
+          statusEl.textContent = "";
+          statusEl.classList.remove("is-visible", "is-buffering");
+          return;
+        }
+        statusEl.textContent = message;
+        statusEl.classList.add("is-visible");
+        statusEl.classList.toggle("is-buffering", Boolean(isBuffering));
+      }
+
+      function pauseOtherVideos(exceptVideo) {
+        allVideos.forEach(function (v) {
+          if (v !== exceptVideo && !v.paused) {
+            v.pause();
+          }
+        });
+      }
+
+      function bindVideoBufferingAndErrors(video, stageEl, statusEl) {
+        var clearBuffering = function () {
+          if (statusEl && statusEl.classList.contains("is-buffering")) {
+            setStageStatus(statusEl, "", false);
+          }
+        };
+
+        video.addEventListener("waiting", function () {
+          if (!video.paused) {
+            setStageStatus(statusEl, "缓冲中…", true);
+          }
+        });
+
+        video.addEventListener("playing", function () {
+          clearBuffering();
+          if (stageEl) stageEl.classList.add("is-playing", "is-started");
+        });
+
+        video.addEventListener("canplay", clearBuffering);
+        video.addEventListener("canplaythrough", clearBuffering);
+
+        video.addEventListener("pause", function () {
+          clearBuffering();
+          if (stageEl) stageEl.classList.remove("is-playing");
+        });
+
+        video.addEventListener("ended", function () {
+          clearBuffering();
+          if (stageEl) stageEl.classList.remove("is-playing", "is-started");
+        });
+
+        video.addEventListener("error", function () {
+          if (stageEl) stageEl.classList.remove("is-playing", "is-started");
+          setStageStatus(statusEl, "视频暂无法播放，请检查网络或稍后重试", false);
+        });
+
+        var sourceEl = video.querySelector("source");
+        if (sourceEl) {
+          sourceEl.addEventListener("error", function () {
+            if (stageEl) stageEl.classList.remove("is-playing", "is-started");
+            setStageStatus(statusEl, "视频暂无法播放，请检查网络或稍后重试", false);
+          });
+        }
+      }
+
+      /* ── 3. Inline Video Stages ────────────────────────────────── */
+      var stages = Array.prototype.slice.call(document.querySelectorAll("[data-video-stage]"));
+      var inlineVideoByWorkId = {};
+
+      function applyAspectRatio(stage, width, height) {
+        if (!width || !height) return;
+        stage.style.setProperty("--media-ratio", width + " / " + height);
+      }
+
+      stages.forEach(function (stage) {
+        var video = stage.querySelector("video");
+        var playBtn = stage.querySelector(".play-trigger");
+        var statusEl = stage.querySelector(".work-stage__status");
+        var card = stage.closest("[data-work-card]");
+        if (!video) return;
+
+        allVideos.push(video);
+        if (card && card.getAttribute("data-work-id")) {
+          inlineVideoByWorkId[card.getAttribute("data-work-id")] = video;
+        }
+
+        var posterUrl = video.getAttribute("poster");
+        if (posterUrl) {
+          var probe = new Image();
+          probe.onload = function () {
+            stage.classList.remove("is-poster-missing");
+            applyAspectRatio(stage, probe.naturalWidth, probe.naturalHeight);
+          };
+          probe.onerror = function () {
+            stage.classList.add("is-poster-missing");
+          };
+          probe.src = posterUrl;
+        }
+
+        video.addEventListener("loadedmetadata", function () {
+          applyAspectRatio(stage, video.videoWidth, video.videoHeight);
+        });
+
+        video.addEventListener("play", function () {
+          stage.classList.add("is-playing", "is-started");
+          if (statusEl && !statusEl.classList.contains("is-buffering")) {
+            setStageStatus(statusEl, "", false);
+          }
+          pauseOtherVideos(video);
+        });
+
+        bindVideoBufferingAndErrors(video, stage, statusEl);
+
+        if (playBtn) {
+          playBtn.addEventListener("click", function () {
+            var promise = video.play();
+            if (promise && typeof promise.catch === "function") {
+              promise.catch(function () {
+                setStageStatus(statusEl, "视频暂无法播放，请检查网络或稍后重试", false);
+              });
+            }
+          });
+        }
+      });
+
+      /* ── 4. Hero Interactive Frame Deck (P0-1) ─────────────────── */
+      var deckEl = document.getElementById("hero-deck");
+      var deckStage = document.getElementById("hero-deck-stage");
+      var deckCards = Array.prototype.slice.call(document.querySelectorAll("[data-deck-card]"));
+      var deckTabs = Array.prototype.slice.call(document.querySelectorAll("[data-deck-tab]"));
+      var deckActive = 0;
+
+      function setDeckActive(index) {
+        var count = deckCards.length;
+        if (!count) return;
+        deckActive = ((index % count) + count) % count;
+
+        deckCards.forEach(function (card, idx) {
+          var layer = (idx - deckActive + count) % count;
+          card.setAttribute("data-layer", String(layer));
+          card.setAttribute("aria-hidden", layer === 0 ? "false" : "true");
+        });
+
+        deckTabs.forEach(function (tab, idx) {
+          var isActive = idx === deckActive;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+      }
+
+      function scrollToTargetWithFlash(selector) {
+        if (!selector || selector.charAt(0) !== "#") return;
+        var target = document.querySelector(selector);
+        if (!target) return;
+        target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
+        if (target.hasAttribute("data-work-card")) {
+          target.classList.remove("is-anchor-flash");
+          void target.offsetWidth;
+          target.classList.add("is-anchor-flash");
+          setTimeout(function () {
+            target.classList.remove("is-anchor-flash");
+          }, 1500);
+        }
+      }
+
+      deckCards.forEach(function (card, idx) {
+        card.addEventListener("click", function (event) {
+          var jumpLink = event.target.closest("[data-deck-jump]");
+          if (jumpLink) {
+            event.preventDefault();
+            scrollToTargetWithFlash(jumpLink.getAttribute("href"));
+            return;
+          }
+          if (idx === deckActive) {
+            setDeckActive(deckActive + 1);
+          } else {
+            setDeckActive(idx);
+          }
+        });
+      });
+
+      deckTabs.forEach(function (tab, idx) {
+        tab.addEventListener("click", function () {
+          setDeckActive(idx);
+        });
+      });
+
+      if (deckEl && deckStage && supportsFineHover && !prefersReducedMotion) {
+        deckEl.addEventListener("mousemove", function (event) {
+          var rect = deckEl.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          var rx = (event.clientX - rect.left) / rect.width;
+          var ry = (event.clientY - rect.top) / rect.height;
+          var rotY = (rx - 0.5) * 8;
+          var rotX = (0.5 - ry) * 7;
+          deckEl.classList.add("is-tilting");
+          deckStage.style.transform = "rotateX(" + rotX.toFixed(2) + "deg) rotateY(" + rotY.toFixed(2) + "deg)";
+
+          var activeCard = deckCards[deckActive];
+          if (activeCard) {
+            activeCard.style.setProperty("--mx", (rx * 100).toFixed(1) + "%");
+            activeCard.style.setProperty("--my", (ry * 100).toFixed(1) + "%");
+          }
+        });
+
+        deckEl.addEventListener("mouseleave", function () {
+          deckEl.classList.remove("is-tilting");
+          deckStage.style.transform = "rotateX(0deg) rotateY(0deg)";
+        });
+      }
+
+      /* Smooth jump with subtle highlight for pipeline & scene proof links */
+      Array.prototype.slice.call(document.querySelectorAll("[data-anchor-jump]")).forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          var href = link.getAttribute("href");
+          if (href && href.charAt(0) === "#") {
+            event.preventDefault();
+            scrollToTargetWithFlash(href);
+          }
+        });
+      });
+
+      /* ── 5. Case Study Fullscreen Modal (P0-3) ─────────────────── */
+      var caseModal = document.getElementById("case-modal");
+      var caseStage = document.getElementById("case-modal-stage");
+      var caseVideo = document.getElementById("case-modal-video");
+      var caseStatus = document.getElementById("case-modal-status");
+      var caseCounter = document.getElementById("case-modal-counter");
+      var caseTag = document.getElementById("case-modal-tag");
+      var caseSpec = document.getElementById("case-modal-spec");
+      var caseTitle = document.getElementById("case-modal-title");
+      var caseScope = document.getElementById("case-modal-scope");
+      var caseChallenge = document.getElementById("case-modal-challenge");
+      var caseSteps = document.getElementById("case-modal-steps");
+      var caseSolution = document.getElementById("case-modal-solution");
+      var caseContent = document.getElementById("case-modal-content");
+      var casePrevBtn = document.getElementById("case-prev");
+      var caseNextBtn = document.getElementById("case-next");
+      var caseCloseBtn = document.getElementById("case-close");
+
+      var activeCaseIndex = -1;
+      var caseLastFocus = null;
+      var modalLoadToken = 0;
+
+      if (caseVideo) {
+        allVideos.push(caseVideo);
+        caseVideo.addEventListener("play", function () {
+          pauseOtherVideos(caseVideo);
+        });
+        bindVideoBufferingAndErrors(caseVideo, caseStage, caseStatus);
+      }
+
+      function renderCaseInModal(idx, resumeTime, autoResume) {
+        var count = CASE_LIST.length;
+        var normIdx = ((idx % count) + count) % count;
+        var item = CASE_LIST[normIdx];
+        activeCaseIndex = normIdx;
+        modalLoadToken += 1;
+        var currentToken = modalLoadToken;
+
+        caseCounter.textContent = "0" + (normIdx + 1) + " / 0" + count;
+        caseTag.textContent = item.tag;
+        caseSpec.textContent = item.spec;
+        caseTitle.textContent = item.title;
+        caseScope.textContent = item.scope;
+        caseChallenge.textContent = item.challenge;
+        caseSolution.textContent = item.solution;
+
+        caseSteps.innerHTML = "";
+        item.steps.forEach(function (step, sIdx) {
+          var li = document.createElement("li");
+          var idxSpan = document.createElement("span");
+          idxSpan.className = "case-steps__idx";
+          idxSpan.textContent = "0" + (sIdx + 1);
+
+          var bodySpan = document.createElement("span");
+          var strong = document.createElement("strong");
+          strong.className = "case-steps__name";
+          strong.textContent = step.name + "：";
+          bodySpan.appendChild(strong);
+          bodySpan.appendChild(document.createTextNode(step.detail));
+
+          li.appendChild(idxSpan);
+          li.appendChild(bodySpan);
+          caseSteps.appendChild(li);
+        });
+
+        if (caseContent) caseContent.scrollTop = 0;
+
+        caseStage.classList.toggle("is-portrait", item.isPortrait);
+        caseStage.style.aspectRatio = item.ratio;
+        setStageStatus(caseStatus, "", false);
+
+        caseVideo.pause();
+        caseVideo.poster = item.poster;
+        caseVideo.src = item.src;
+        caseVideo.load();
+
+        if (resumeTime > 0 || autoResume) {
+          var onReady = function () {
+            if (currentToken !== modalLoadToken) return;
+            if (resumeTime > 0 && isFinite(caseVideo.duration) && resumeTime < caseVideo.duration) {
+              try {
+                caseVideo.currentTime = resumeTime;
+              } catch (e) {
+                /* ignore seek errors */
+              }
+            }
+            if (autoResume) {
+              var p = caseVideo.play();
+              if (p && typeof p.catch === "function") {
+                p.catch(function () { /* autoplay fallback */ });
+              }
+            }
+          };
+          caseVideo.addEventListener("loadedmetadata", onReady, { once: true });
+        }
+      }
+
+      function openCaseModal(workId) {
+        var item = CASE_BY_ID[workId];
+        if (!item) return;
+
+        var inlineVideo = inlineVideoByWorkId[workId];
+        var wasPlaying = false;
+        var resumeTime = 0;
+        if (inlineVideo) {
+          wasPlaying = !inlineVideo.paused && !inlineVideo.ended;
+          resumeTime = inlineVideo.currentTime || 0;
+        }
+        pauseOtherVideos(null);
+
+        caseLastFocus = document.activeElement;
+        renderCaseInModal(item.index, resumeTime, wasPlaying);
+
+        caseModal.classList.add("is-open");
+        caseModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        caseCloseBtn.focus();
+      }
+
+      function closeCaseModal() {
+        if (activeCaseIndex === -1) return;
+        var currentItem = CASE_LIST[activeCaseIndex];
+        var currentTime = caseVideo.currentTime || 0;
+        caseVideo.pause();
+        setStageStatus(caseStatus, "", false);
+
+        if (currentItem && currentTime > 0) {
+          var inlineVideo = inlineVideoByWorkId[currentItem.id];
+          if (inlineVideo && inlineVideo.readyState >= 1) {
+            try {
+              inlineVideo.currentTime = currentTime;
+            } catch (e) {
+              /* ignore */
+            }
+          }
+        }
+
+        caseModal.classList.remove("is-open");
+        caseModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        activeCaseIndex = -1;
+
+        if (caseLastFocus && typeof caseLastFocus.focus === "function") {
+          caseLastFocus.focus();
+        }
+      }
+
+      Array.prototype.slice.call(document.querySelectorAll("[data-open-case]")).forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          openCaseModal(btn.getAttribute("data-open-case"));
+        });
+      });
+
+      casePrevBtn.addEventListener("click", function () {
+        if (activeCaseIndex !== -1) renderCaseInModal(activeCaseIndex - 1, 0, false);
+      });
+
+      caseNextBtn.addEventListener("click", function () {
+        if (activeCaseIndex !== -1) renderCaseInModal(activeCaseIndex + 1, 0, false);
+      });
+
+      caseCloseBtn.addEventListener("click", closeCaseModal);
+
+      caseModal.addEventListener("click", function (event) {
+        if (event.target === caseModal) closeCaseModal();
+      });
+
+      /* ── 6. Scene Gallery Lightbox (Counter + Touch Swipe) ─────── */
+      var triggers = Array.prototype.slice.call(document.querySelectorAll("[data-lightbox-index]"));
+      var galleryItems = triggers.map(function (btn) {
+        var img = btn.querySelector("img");
+        var card = btn.closest(".scene-card");
+        var title = card ? card.querySelector(".scene-card__title").textContent : "";
+        var desc = card ? card.querySelector(".scene-card__desc").textContent : "";
+
+        function markMissing() { btn.classList.add("is-missing"); }
+        function markLoaded() { btn.classList.remove("is-missing"); }
+
+        if (img) {
+          img.addEventListener("error", markMissing);
+          img.addEventListener("load", markLoaded);
+          if (img.complete) {
+            if (img.naturalWidth === 0) markMissing();
+            else markLoaded();
+          }
+        }
+
+        return {
+          button: btn,
+          src: img ? img.getAttribute("src") : "",
+          alt: img ? img.getAttribute("alt") : "",
+          caption: title + (desc ? " — " + desc : "")
+        };
+      });
+
+      var lightbox = document.getElementById("lightbox");
+      var lightboxDialog = document.getElementById("lightbox-dialog");
+      var lightboxImg = document.getElementById("lightbox-img");
+      var lightboxCounter = document.getElementById("lightbox-counter");
+      var lightboxCaption = document.getElementById("lightbox-caption");
+      var prevBtn = document.getElementById("lightbox-prev");
+      var nextBtn = document.getElementById("lightbox-next");
+      var closeBtn = document.getElementById("lightbox-close");
+      var activeLightboxIndex = -1;
+      var lightboxLastFocus = null;
+
+      function openLightbox(index) {
+        var item = galleryItems[index];
+        if (!item || item.button.classList.contains("is-missing")) return;
+        activeLightboxIndex = index;
+        if (!lightbox.classList.contains("is-open")) {
+          lightboxLastFocus = document.activeElement;
+        }
+        lightboxImg.src = item.src;
+        lightboxImg.alt = item.alt;
+        lightboxCounter.textContent = "0" + (index + 1) + " / 0" + galleryItems.length;
+        lightboxCaption.textContent = item.caption;
+        lightbox.classList.add("is-open");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
+      }
+
+      function closeLightbox() {
+        if (activeLightboxIndex === -1) return;
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        activeLightboxIndex = -1;
+        if (lightboxLastFocus && typeof lightboxLastFocus.focus === "function") {
+          lightboxLastFocus.focus();
+        }
+      }
+
+      function stepLightbox(delta) {
+        if (activeLightboxIndex === -1) return;
+        var count = galleryItems.length;
+        for (var i = 1; i <= count; i++) {
+          var nextIdx = (activeLightboxIndex + delta * i + count) % count;
+          if (!galleryItems[nextIdx].button.classList.contains("is-missing")) {
+            openLightbox(nextIdx);
+            return;
+          }
+        }
+      }
+
+      galleryItems.forEach(function (item, idx) {
+        item.button.addEventListener("click", function () {
+          openLightbox(idx);
+        });
+      });
+
+      closeBtn.addEventListener("click", closeLightbox);
+      prevBtn.addEventListener("click", function () { stepLightbox(-1); });
+      nextBtn.addEventListener("click", function () { stepLightbox(1); });
+
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+
+      /* Touch swipe support for mobile lightbox */
+      var touchStartX = 0;
+      var touchStartY = 0;
+      lightboxDialog.addEventListener("touchstart", function (event) {
+        if (!event.touches || event.touches.length !== 1) return;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+      }, { passive: true });
+
+      lightboxDialog.addEventListener("touchend", function (event) {
+        if (activeLightboxIndex === -1 || !event.changedTouches || event.changedTouches.length !== 1) return;
+        var dx = event.changedTouches[0].clientX - touchStartX;
+        var dy = event.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 42 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          stepLightbox(dx < 0 ? 1 : -1);
+        }
+      }, { passive: true });
+
+      /* Global keyboard navigation for both modals */
+      document.addEventListener("keydown", function (event) {
+        if (activeCaseIndex !== -1) {
+          if (event.key === "Escape") {
+            closeCaseModal();
+          } else if (event.key === "ArrowLeft" && document.activeElement !== caseVideo) {
+            renderCaseInModal(activeCaseIndex - 1, 0, false);
+          } else if (event.key === "ArrowRight" && document.activeElement !== caseVideo) {
+            renderCaseInModal(activeCaseIndex + 1, 0, false);
+          }
+          return;
+        }
+        if (activeLightboxIndex !== -1) {
+          if (event.key === "Escape") closeLightbox();
+          else if (event.key === "ArrowLeft") stepLightbox(-1);
+          else if (event.key === "ArrowRight") stepLightbox(1);
+        }
+      });
+
+      /* ── 7. Copy Email Button ──────────────────────────────────── */
+      var copyBtn = document.querySelector("[data-copy-email]");
+      if (copyBtn) {
+        var copyTimer = null;
+        copyBtn.addEventListener("click", function () {
+          var email = copyBtn.getAttribute("data-copy-email");
+          function markCopied() {
+            copyBtn.textContent = "已复制";
+            copyBtn.classList.add("is-copied");
+            clearTimeout(copyTimer);
+            copyTimer = setTimeout(function () {
+              copyBtn.textContent = "复制邮箱";
+              copyBtn.classList.remove("is-copied");
+            }, 2200);
+          }
+
+          function fallbackCopy() {
+            var ta = document.createElement("textarea");
+            ta.value = email;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              document.execCommand("copy");
+              markCopied();
+            } catch (e) {
+              /* ignore */
+            }
+            document.body.removeChild(ta);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(markCopied).catch(fallbackCopy);
+          } else {
+            fallbackCopy();
+          }
+        });
+      }
+
+      /* ── 8. Subtle Scroll Reveal & Active Nav Highlight ────────── */
+      var reveals = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+      if ("IntersectionObserver" in window) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
+
+        reveals.forEach(function (el) { revealObserver.observe(el); });
+
+        var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav-links a"));
+        var sections = navLinks.map(function (link) {
+          return document.querySelector(link.getAttribute("href"));
+        }).filter(Boolean);
+
+        var navObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var id = "#" + entry.target.id;
+            navLinks.forEach(function (link) {
+              link.classList.toggle("is-active", link.getAttribute("href") === id);
+            });
+          });
+        }, { rootMargin: "-28% 0px -56% 0px", threshold: 0 });
+
+        sections.forEach(function (sec) { navObserver.observe(sec); });
+      } else {
+        reveals.forEach(function (el) { el.classList.add("is-visible"); });
+      }
+    })();
+  </script>
+</body>
+</html>
